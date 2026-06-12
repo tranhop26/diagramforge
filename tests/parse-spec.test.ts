@@ -196,9 +196,17 @@ describe('AC-6: DSL parser (pure)', () => {
     });
   });
 
-  it('parseDsl: typeHint overrides the first-line type prefix', () => {
-    const r = parseDsl('flowchart: x\nA -> B', 'erd');
-    expect(r.ir.kind).toBe('erd');
+  it('parseDsl: typeHint is used when there is no first-line type prefix', () => {
+    // The first-line prefix is the strongest user signal and always wins.
+    // The hint is consulted only when the prefix is absent.
+    const withHint = parseDsl('A -> B', 'erd');
+    expect(withHint.ir.kind).toBe('erd');
+    // First-line prefix wins over the hint.
+    const withPrefix = parseDsl('flowchart: x\nA -> B', 'erd');
+    expect(withPrefix.ir.kind).toBe('flowchart');
+    // Default without prefix or hint is flowchart.
+    const withNeither = parseDsl('A -> B');
+    expect(withNeither.ir.kind).toBe('flowchart');
   });
 
   it('parseDsl: shape defaults to box when omitted', () => {
@@ -235,9 +243,13 @@ async function expectOkEnvelope(
 describe('AC-6: end-to-end DSL (no LLM env)', () => {
   const state: ServerState = {} as ServerState;
   beforeAll(async () => {
-    // Default env has no OPENAI_API_KEY, so the server must use the
-    // DSL parser for everything and never emit any LLM-failure log.
-    state.client = new StdioClient();
+    // We explicitly clear OPENAI_API_KEY in the child process because
+    // the test runner's parent env may have a key set (AC-1's other
+    // tests rely on it). The server must see no key and use the DSL
+    // parser for everything, never emitting any LLM-failure log.
+    state.client = new StdioClient({
+      env: { OPENAI_API_KEY: '' },
+    });
     await state.client.initialize();
   }, 15_000);
   afterAll(async () => {

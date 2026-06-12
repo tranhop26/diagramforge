@@ -96,8 +96,11 @@ const SEQ_ACTOR_LABEL_RE = /^actor\s+([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+)$/i;
 /** Sequence actor without label: `actor id`. */
 const SEQ_ACTOR_BARE_RE = /^actor\s+([A-Za-z_][A-Za-z0-9_]*)\s*$/i;
 
-/** Sequence message: `id OP id: label` where OP is `->` (sync), `-->` (return), `->>` (async). */
-const SEQ_MESSAGE_RE = /^([A-Za-z_][A-Za-z0-9_]*)\s*(->|--|->>)\s*([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+)$/;
+/** Sequence message: `id OP id: label` where OP is `->` (sync), `-->` (return), `->>` (async).
+ *  The longer operators are tried first because regex alternation is
+ *  leftmost-first (not longest-match); putting `->>` before `->` and
+ *  `-->` before `--` ensures correct disambiguation. */
+const SEQ_MESSAGE_RE = /^([A-Za-z_][A-Za-z0-9_]*)\s*(->>|-->|->)\s*([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+)$/;
 
 /** ERD entity: `entity id: label { a, b }` (label and attrs both optional). */
 const ERD_ENTITY_RE = /^entity\s+([A-Za-z_][A-Za-z0-9_]*)(?:\s*:\s*([^{]+?))?(?:\s*\{([^}]*)\})?\s*$/i;
@@ -107,7 +110,7 @@ const ERD_ENTITY_RE = /^entity\s+([A-Za-z_][A-Za-z0-9_]*)(?:\s*:\s*([^{]+?))?(?:
  *   lhs / rhs are one of `||`, `o|`, `}|`, `o{`, `}o` (Mermaid ERD markers).
  *   dashes are 2-3 hyphens.
  */
-const ERD_RELATION_RE = /^([A-Za-z_][A-Za-z0-9_]*)\s+(\|\||o\||}\||o{|}o)(-{-2,3})(\|\||o\||}\||o{|}o)?\s+([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+)$/;
+const ERD_RELATION_RE = /^([A-Za-z_][A-Za-z0-9_]*)\s+(\|\||o\||}\||o{|}o)(-{2,3})(\|\||o\||}\||o{|}o)?\s+([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.+)$/;
 
 export interface DslParseResult {
   ir: DiagramIR;
