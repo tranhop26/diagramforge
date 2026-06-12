@@ -1,0 +1,47 @@
+{
+  "name": "diagramforge",
+  "version": "0.1.0",
+  "description": "Zero-dependency, deterministic text-to-diagram MCP server (TypeScript, stdio).",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "diagramforge": "./dist/index.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "pretest": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "probe": "node scripts/probe-tools.js",
+    "build:examples": "tsx scripts/build-examples.ts",
+    "check:examples": "node scripts/check-examples.js",
+    "audit": "npm audit --audit-level=high",
+    "clean": "rm -rf dist coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "openai": "^4.55.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4",
+    "vitest": "^3.2.6"
+  }
+}
