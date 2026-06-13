@@ -43,5 +43,10 @@
     "tsx": "^4.16.2",
     "typescript": "^5.5.4",
     "vitest": "^3.2.6"
+  },
+  "overrides": {
+    "vite": {
+      "esbuild": "^0.28.1"
+    }
   }
 }
