@@ -78,12 +78,16 @@ describe('AC-4: tool error envelopes', () => {
       await expectErrorEnvelope('render_diagram', {});
     });
 
-    it('rejects wrong `theme` enum', async () => {
-      await expectErrorEnvelope('render_diagram', {
+    it('accepts unknown theme (falls back to light, AC-7)', async () => {
+      // Per AC-7, an unknown theme name is not a bad-input error:
+      // the renderer falls back to `light` and the handler returns
+      // an `{ ok: true, value: { svg, mermaid, html } }` envelope.
+      const result = await state.client.callTool<ToolOutput<unknown>>('render_diagram', {
         ir: { kind: 'flowchart', title: '', nodes: [], edges: [] },
         type: 'flowchart',
         theme: 'neon',
       });
+      expect(result.ok).toBe(true);
     });
 
     it('rejects wrong `type` enum', async () => {
@@ -100,11 +104,13 @@ describe('AC-4: tool error envelopes', () => {
       await expectErrorEnvelope('make_diagram', {});
     });
 
-    it('rejects wrong `theme` enum', async () => {
-      await expectErrorEnvelope('make_diagram', {
-        text: 'demo',
+    it('accepts unknown theme (falls back to light, AC-7)', async () => {
+      // Per AC-7, unknown theme is graceful fallback, not an error.
+      const result = await state.client.callTool<ToolOutput<unknown>>('make_diagram', {
+        text: 'flowchart: Demo\nA -> B',
         theme: 'solarized',
       });
+      expect(result.ok).toBe(true);
     });
 
     it('rejects wrong `type` enum', async () => {
