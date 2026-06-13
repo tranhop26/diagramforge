@@ -198,4 +198,4 @@ function countEdges(ir: DiagramIR): number {
   }
 }
 
-export const __INTERNAL__ = { renderImpl, validateIr };
+export const __INTERNAL__ = { renderImpl };

@@ -131,7 +131,6 @@ async function writeExample(spec: ExampleSpec): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  mkdirSync(EXAMPLES_ROOT, { recursive: true });
   for (const spec of EXAMPLES) {
     await writeExample(spec);
   }

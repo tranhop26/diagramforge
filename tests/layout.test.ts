@@ -694,12 +694,4 @@ describe('AC-12: per-tool smoke coverage (in-process)', () => {
     expect(r.manifest).toBeDefined();
     expect(r.summary).toMatch(/^flowchart: /);
   });
-
-  it('list_diagram_types: 3+ types and 3+ themes (covered by stdio test above)', () => {
-    // `list_diagram_types` is a private handler with no __INTERNAL__
-    // export; the comprehensive stdio smoke test above exercises it
-    // end-to-end. This entry is here to keep the per-tool smoke
-    // coverage matrix explicit and greppable.
-    expect(true).toBe(true);
-  });
 });

@@ -147,4 +147,4 @@ function edgeCountLabel(type: DiagramType): { nodes: string; edges: string } {
   }
 }
 
-export const __INTERNAL__ = { makeImpl, buildSummary };
+export const __INTERNAL__ = { makeImpl };

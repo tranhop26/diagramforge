@@ -66,12 +66,6 @@ import type {
   SequenceMessageKind,
 } from '../types.js';
 
-/** Valid id characters: ASCII letter / underscore followed by word chars. */
-const ID_RE = /[A-Za-z_][A-Za-z0-9_]*/;
-
-/** Capturing group version for parsing. */
-const ID_GROUP_RE = /([A-Za-z_][A-Za-z0-9_]*)/;
-
 /** Type-prefix line: `flowchart: Title` / `sequence: Title` / `erd: Title`. */
 const TYPE_PREFIX_RE = /^(flowchart|sequence|erd)\s*:\s*(.*)$/i;
 
@@ -363,5 +357,3 @@ function dropFirstMatchingLine(lines: ReadonlyArray<string>, target: string): st
   return out;
 }
 
-/** Re-export for tests / introspection. */
-export const __INTERNAL__ = { ID_RE, ID_GROUP_RE };

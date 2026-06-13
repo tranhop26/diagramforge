@@ -19,7 +19,6 @@ import type { Theme } from '../types.js';
 import {
   FONT_SIZE,
   FONT_SIZE_SMALL,
-  MIN_NODE_WIDTH,
 } from '../layout/constants.js';
 import type {
   ErdGeometry,
@@ -125,8 +124,6 @@ function renderSequence(g: SequenceGeometry, theme: Theme): string {
       `<line class="edge" x1="${a.x}" y1="${a.lifelineY1}" x2="${a.x}" y2="${a.lifelineY2}" stroke-dasharray="6 4"/>`,
     );
   }
-  // Suppress unused-import noise.
-  void MIN_NODE_WIDTH;
   // Messages.
   for (const m of g.messages) {
     const cls =
@@ -228,6 +225,3 @@ export function renderSvg(geometry: Geometry, theme: Theme): string {
     `</svg>`,
   ].join('');
 }
-
-// Re-export helpers used by tests.
-export const __INTERNAL__ = { SVG_NS, escapeXml, shapeToPath };

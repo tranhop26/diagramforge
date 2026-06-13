@@ -29,10 +29,8 @@ import type {
   DiagramType,
   ErdIR,
   FlowchartIR,
-  Manifest,
   MakeDiagramResult,
   SequenceIR,
-  ToolOutput,
 } from '../src/types.js';
 
 const FLOW_TEXT =
