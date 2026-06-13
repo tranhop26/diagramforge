@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<title>Order processing</title>
+<style>
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, sans-serif; }
+header { display: flex; align-items: center; gap: 1rem; padding: 12px 20px; border-bottom: 1px solid var(--muted); }
+header h1 { margin: 0; font-size: 14px; font-weight: 600; }
+header .meta { font-size: 12px; color: var(--muted); }
+header select { background: var(--bg); color: var(--fg); border: 1px solid var(--muted); padding: 4px 8px; border-radius: 4px; }
+main { padding: 0; }
+:root[data-theme="light"] { --bg: #fdfdfd; --fg: #1a1a1a; --accent: #2b5fa6; --muted: #5a5a5a; }
+:root[data-theme="dark"] { --bg: #101216; --fg: #e6e6e6; --accent: #62c4d8; --muted: #9aa0a6; }
+:root[data-theme="blueprint"] { --bg: #0e3a6b; --fg: #ffffff; --accent: #ffd166; --muted: #bcd4f2; }
+</style>
+</head>
+<body>
+<header>
+<h1>Order processing</h1>
+<span class="meta">flowchart · 4 nodes · 3 edges · theme=light</span>
+<select id="theme" aria-label="Theme"><option value="light" selected>Light</option><option value="dark">Dark</option><option value="blueprint">Blueprint</option></select>
+</header>
+<main>
+<svg id="zoom-host" width="960" height="640" viewBox="0 0 960 640"><defs><style>text{font-family:Inter,system-ui,sans-serif;font-size:14px;fill:#1a1a1a} .edge{stroke:#3a3a3a;stroke-width:1.5;fill:none} .node-fill{fill:#ffffff;stroke:#2b5fa6;stroke-width:1.25} .label{font-size:11px;fill:#5a5a5a} .arrow-sync-end{marker-end:url(#arrow-sync)} .arrow-async-end{marker-end:url(#arrow-async)} .arrow-return-end{marker-end:url(#arrow-return)}</style><marker id="arrow-sync" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/></marker><marker id="arrow-async" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#3a3a3a" stroke-width="1.5"/></marker><marker id="arrow-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M10,0 L0,5 L10,10" fill="none" stroke="#3a3a3a" stroke-width="1.5"/></marker></defs><rect x="0" y="0" width="960" height="640" fill="#fdfdfd"/><g id="zoom"><text x="480" y="18" text-anchor="middle" font-weight="600" fill="#1a1a1a">Order processing</text><polyline class="edge arrow-sync-end" points="106,228 106,252 106,252 106,84 106,108"/><polyline class="edge arrow-sync-end" points="106,144 106,168 54,168 54,0 54,24"/><text x="60" y="164" class="label">yes</text><polyline class="edge arrow-sync-end" points="106,144 106,168 152,168 152,0 152,24"/><text x="158" y="164" class="label">no</text><path class="node-fill" d="M 74 192 h 64 v 36 h -64 z"/><text x="106" y="215" text-anchor="middle" fill="#1a1a1a">Start</text><path class="node-fill" d="M 106 108 L 142 126 L 106 144 L 70 126 z"/><text x="106" y="131" text-anchor="middle" fill="#1a1a1a">Decide</text><path class="node-fill" d="M 24 24 h 60 v 36 h -60 z"/><text x="54" y="47" text-anchor="middle" fill="#1a1a1a">Pay</text><path class="node-fill" d="M 116 24 h 72 v 36 h -72 z"/><text x="152" y="47" text-anchor="middle" fill="#1a1a1a">Cancel</text></g></svg>
+</main>
+<script>
+(function () {
+  var sel = document.getElementById('theme');
+  if (sel) {
+    sel.addEventListener('change', function (e) {
+      var v = e && e.target && e.target.value;
+      if (v) document.documentElement.setAttribute('data-theme', v);
+    });
+  }
+  var svg = document.querySelector('svg');
+  var zoom = document.getElementById('zoom');
+  if (svg && zoom) {
+    var viewBox = svg.getAttribute('viewBox');
+    var vb = viewBox ? viewBox.split(/\s+/).map(Number) : [0, 0, 960, 640];
+    var x = vb[0] || 0, y = vb[1] || 0, w = vb[2] || 960, h = vb[3] || 640;
+    svg.setAttribute('viewBox', x + ' ' + y + ' ' + w + ' ' + h);
+    svg.style.cursor = 'grab';
+    var tx = 0, ty = 0, scale = 1, dragging = false, lastX = 0, lastY = 0;
+    function apply() {
+      zoom.setAttribute('transform', 'translate(' + tx + ' ' + ty + ') scale(' + scale + ')');
+    }
+    svg.addEventListener('mousedown', function (e) {
+      dragging = true; lastX = e.clientX; lastY = e.clientY;
+      svg.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      tx += (e.clientX - lastX); ty += (e.clientY - lastY);
+      lastX = e.clientX; lastY = e.clientY;
+      apply();
+    });
+    window.addEventListener('mouseup', function () {
+      if (!dragging) return; dragging = false; svg.style.cursor = 'grab';
+    });
+    svg.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+      scale *= factor;
+      if (scale < 0.1) scale = 0.1;
+      if (scale > 8) scale = 8;
+      apply();
+    }, { passive: false });
+  }
+})();
+</script>
+</body>
+</html>

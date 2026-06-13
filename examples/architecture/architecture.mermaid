@@ -1,0 +1,23 @@
+flowchart TD
+  A[AI agent text spec]
+  B{DSL or prose?}
+  C[parse_spec DSL route]
+  D[parse_spec LLM fallback]
+  E[DiagramIR typed]
+  F[render_diagram]
+  G[layout engine]
+  H[SVG output]
+  I[Mermaid output]
+  J[HTML preview]
+  K[theme presets]
+  A --> B : text input
+  B --> C : DSL
+  B --> D : prose
+  C --> E : produces
+  D --> E : produces
+  E --> F : typed IR
+  F --> G : layout pass
+  F --> H : emit
+  F --> I : emit
+  F --> J : emit
+  K --> F : colors

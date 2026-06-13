@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<title>Library schema</title>
+<style>
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, sans-serif; }
+header { display: flex; align-items: center; gap: 1rem; padding: 12px 20px; border-bottom: 1px solid var(--muted); }
+header h1 { margin: 0; font-size: 14px; font-weight: 600; }
+header .meta { font-size: 12px; color: var(--muted); }
+header select { background: var(--bg); color: var(--fg); border: 1px solid var(--muted); padding: 4px 8px; border-radius: 4px; }
+main { padding: 0; }
+:root[data-theme="light"] { --bg: #fdfdfd; --fg: #1a1a1a; --accent: #2b5fa6; --muted: #5a5a5a; }
+:root[data-theme="dark"] { --bg: #101216; --fg: #e6e6e6; --accent: #62c4d8; --muted: #9aa0a6; }
+:root[data-theme="blueprint"] { --bg: #0e3a6b; --fg: #ffffff; --accent: #ffd166; --muted: #bcd4f2; }
+</style>
+</head>
+<body>
+<header>
+<h1>Library schema</h1>
+<span class="meta">erd · 3 nodes · 2 edges · theme=light</span>
+<select id="theme" aria-label="Theme"><option value="light" selected>Light</option><option value="dark">Dark</option><option value="blueprint">Blueprint</option></select>
+</header>
+<main>
+<svg id="zoom-host" width="960" height="640" viewBox="0 0 960 640"><defs><style>text{font-family:Inter,system-ui,sans-serif;font-size:14px;fill:#1a1a1a} .edge{stroke:#3a3a3a;stroke-width:1.5;fill:none} .node-fill{fill:#ffffff;stroke:#2b5fa6;stroke-width:1.25} .label{font-size:11px;fill:#5a5a5a} .arrow-sync-end{marker-end:url(#arrow-sync)} .arrow-async-end{marker-end:url(#arrow-async)} .arrow-return-end{marker-end:url(#arrow-return)}</style><marker id="arrow-sync" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/></marker><marker id="arrow-async" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#3a3a3a" stroke-width="1.5"/></marker><marker id="arrow-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M10,0 L0,5 L10,10" fill="none" stroke="#3a3a3a" stroke-width="1.5"/></marker></defs><rect x="0" y="0" width="960" height="640" fill="#fdfdfd"/><g id="zoom"><text x="480" y="18" text-anchor="middle" font-weight="600" fill="#1a1a1a">Library schema</text><rect class="node-fill" x="24" y="24" width="180" height="72"/><rect class="node-fill" x="24" y="24" width="180" height="28" fill="#2b5fa6" stroke="#2b5fa6"/><text x="32" y="42" font-weight="600" fill="#fdfdfd">Person name</text><text x="32" y="68" fill="#1a1a1a">id</text><text x="32" y="90" fill="#1a1a1a">name</text><line x1="24" y1="52" x2="204" y2="52" stroke="#2b5fa6"/><rect class="node-fill" x="252" y="24" width="180" height="94"/><rect class="node-fill" x="252" y="24" width="180" height="28" fill="#2b5fa6" stroke="#2b5fa6"/><text x="260" y="42" font-weight="600" fill="#fdfdfd">Book</text><text x="260" y="68" fill="#1a1a1a">id</text><text x="260" y="90" fill="#1a1a1a">title</text><text x="260" y="112" fill="#1a1a1a">isbn</text><line x1="252" y1="52" x2="432" y2="52" stroke="#2b5fa6"/><rect class="node-fill" x="24" y="166" width="180" height="72"/><rect class="node-fill" x="24" y="166" width="180" height="28" fill="#2b5fa6" stroke="#2b5fa6"/><text x="32" y="184" font-weight="600" fill="#fdfdfd">Press name</text><text x="32" y="210" fill="#1a1a1a">id</text><text x="32" y="232" fill="#1a1a1a">name</text><line x1="24" y1="194" x2="204" y2="194" stroke="#2b5fa6"/><line class="edge" x1="252" y1="71" x2="204" y2="60"/><text x="248" y="67" text-anchor="end" class="label">1</text><text x="208" y="56" text-anchor="start" class="label">N</text><text x="228" y="61.5" text-anchor="middle" class="label">written by</text><line class="edge" x1="252" y1="71" x2="204" y2="202"/><text x="248" y="67" text-anchor="end" class="label">1</text><text x="208" y="198" text-anchor="start" class="label">N</text><text x="228" y="132.5" text-anchor="middle" class="label">published by</text></g></svg>
+</main>
+<script>
+(function () {
+  var sel = document.getElementById('theme');
+  if (sel) {
+    sel.addEventListener('change', function (e) {
+      var v = e && e.target && e.target.value;
+      if (v) document.documentElement.setAttribute('data-theme', v);
+    });
+  }
+  var svg = document.querySelector('svg');
+  var zoom = document.getElementById('zoom');
+  if (svg && zoom) {
+    var viewBox = svg.getAttribute('viewBox');
+    var vb = viewBox ? viewBox.split(/\s+/).map(Number) : [0, 0, 960, 640];
+    var x = vb[0] || 0, y = vb[1] || 0, w = vb[2] || 960, h = vb[3] || 640;
+    svg.setAttribute('viewBox', x + ' ' + y + ' ' + w + ' ' + h);
+    svg.style.cursor = 'grab';
+    var tx = 0, ty = 0, scale = 1, dragging = false, lastX = 0, lastY = 0;
+    function apply() {
+      zoom.setAttribute('transform', 'translate(' + tx + ' ' + ty + ') scale(' + scale + ')');
+    }
+    svg.addEventListener('mousedown', function (e) {
+      dragging = true; lastX = e.clientX; lastY = e.clientY;
+      svg.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      tx += (e.clientX - lastX); ty += (e.clientY - lastY);
+      lastX = e.clientX; lastY = e.clientY;
+      apply();
+    });
+    window.addEventListener('mouseup', function () {
+      if (!dragging) return; dragging = false; svg.style.cursor = 'grab';
+    });
+    svg.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+      scale *= factor;
+      if (scale < 0.1) scale = 0.1;
+      if (scale > 8) scale = 8;
+      apply();
+    }, { passive: false });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+erDiagram
+  Author {
+    id string
+    name string
+  }
+  Book {
+    id string
+    title string
+    isbn string
+  }
+  Publisher {
+    id string
+    name string
+  }
+  Book ||--}o Author : written by
+  Book ||--}o Publisher : published by

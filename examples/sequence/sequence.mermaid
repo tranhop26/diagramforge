@@ -1,0 +1,8 @@
+sequenceDiagram
+  actor DB
+  actor S
+  actor U
+  U ->> S: POST /login
+  S ->> DB: query user
+  DB -->> S: user record
+  S -->> U: 200 OK
