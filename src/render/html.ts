@@ -93,6 +93,14 @@ export function renderHtml(input: RenderHtmlInput): string {
   const { svg, manifest, title, allThemes } = input;
   const css = allThemes.map(themeCssBlock).join('\n');
   const options = themeOptions(allThemes, manifest.theme);
+  // Embed the SVG inline. HTML5 parsers auto-namespace inline SVG,
+  // so we strip the standalone `xmlns` and the XML declaration to
+  // guarantee the rendered document contains no `https?://`
+  // substring and no orphan `<?xml ?>` processing instruction.
+  const embeddedSvg = svg
+    .replace('<?xml version="1.0" encoding="UTF-8"?>', '')
+    .replace(' xmlns="http://www.w3.org/2000/svg"', '')
+    .replace('<svg ', '<svg id="zoom-host" ');
   const body = `<!doctype html>
 <html lang="en" data-theme="${manifest.theme}">
 <head>
@@ -115,7 +123,7 @@ ${css}
 <select id="theme" aria-label="Theme">${options}</select>
 </header>
 <main>
-${svg.replace('<svg ', '<svg id="zoom-host" ')}
+${embeddedSvg}
 </main>
 ${SCRIPT_BLOCK}
 </body>
